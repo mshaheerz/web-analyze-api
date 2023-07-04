@@ -5,7 +5,7 @@ const bcryptSalt = genSaltSync(10)
 import logModel from "../models/logsModel.js";
 import jwt from "jsonwebtoken";
 const jwtsecret = 'hehemysecret'
-import { getWebLinks, countWords, getMediaLinks } from "../helpers/mainHelper.js";
+import { getWebLinks, countWords, getMediaLinks,isValidHttpUrl } from "../helpers/mainHelper.js";
 
 
 // -------------------> user login <------------------------ //
@@ -77,6 +77,13 @@ export function logout(req, res) {
 export async function getInsights(req, res) {
     try {
         const { url } = req.body;
+
+        //checking the url is valid
+        const isUrl = await isValidHttpUrl(url)
+        if (!isUrl) {
+            url = `https://${url}`
+        }
+        
         const webLinks = await getWebLinks(url)
         const mediaLinks = await getMediaLinks(url)
         const wordCounts = await countWords(url)
