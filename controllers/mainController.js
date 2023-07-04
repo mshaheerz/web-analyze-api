@@ -21,7 +21,7 @@ export async function login(req, res) {
             if (passOk) {
                 jwt.sign({ id: user._id }, jwtsecret, { expiresIn: '1d' }, (err, token) => {
                     if (err) throw err;
-                    res.cookie('token', token).json({ status: 'success', message: 'user login success', user })
+                    res.cookie('token', token).json({ status: 'success', message: 'user login success', user,token })
                 })
 
             } else {
