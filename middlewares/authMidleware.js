@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 const jwtsecret = 'hehemysecret'
 export function userAuth(req, res, next){
     try {
-        const { token } = req.cookies
+        const  token = req.headers['usertoken']
      
         if (token) {
             jwt.verify(token, jwtsecret, {}, async (err, user) => {
