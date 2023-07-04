@@ -6,7 +6,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 const app = express();
 const PORT= 3000;
-app.use(cors({ credentials: true, origin: 'https://web-analyze-client.vercel.app'}))
+app.use(cors({ credentials: true, origin: 'https://client-3koj.onrender.com'}))
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser())
 app.use(express.json());
