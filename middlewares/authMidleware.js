@@ -1,8 +1,12 @@
 import jwt from "jsonwebtoken";
-const jwtsecret = 'hehemysecret'
+
+//secret key
+const jwtsecret = 'hehemysecret';
+
+
 export function userAuth(req, res, next){
     try {
-        const  token = req.headers['usertoken']
+        const token = req.headers['usertoken']
      
         if (token) {
             jwt.verify(token, jwtsecret, {}, async (err, user) => {
@@ -15,5 +19,6 @@ export function userAuth(req, res, next){
         }
     } catch (error) {
         console.log(error.message)
+        res.json({status:'failed', message:'Internal server error'});
     }
 }

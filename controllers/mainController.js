@@ -21,7 +21,7 @@ export async function login(req, res) {
             if (passOk) {
                 jwt.sign({ id: user._id }, jwtsecret, { expiresIn: '1d' }, (err, token) => {
                     if (err) throw err;
-                    res.cookie('token', token).json({ status: 'success', message: 'user login success', user,token })
+                    res.json({ status: 'success', message: 'user login success', user,token })
                 })
 
             } else {
@@ -76,11 +76,13 @@ export function logout(req, res) {
 
 export async function getInsights(req, res) {
     try {
-        const { url } = req.body
+        const { url } = req.body;
         const webLinks = await getWebLinks(url)
         const mediaLinks = await getMediaLinks(url)
         const wordCounts = await countWords(url)
         const isLog = await logModel.findOne({ domain: url })
+
+        //if already added domain name so dont need create new one just update
         if (isLog) {
             await logModel.findByIdAndUpdate(isLog._id, {
                 webLinks: webLinks,
@@ -98,10 +100,9 @@ export async function getInsights(req, res) {
         }
 
         const logs = await logModel.find({ user: req.userId });
-
         res.json({ status: 'success', logs })
     } catch (error) {
-        console.log(error.message)
+        res.json({ status: 'failed', message:'internal server error' })
     }
 }
 
@@ -112,12 +113,12 @@ export async function getAllInsights(req, res) {
         const logs = await logModel.find({ user: req.userId }).sort({ updatedAt: -1 })
         res.json({ status: 'success', logs })
     } catch (error) {
-
+        res.json({ status: 'success', message:'internal server error' })
     }
 }
 
 
-//updating insights
+//updating existing insights
 export async function updateInsights(req, res) {
     try {
         const fav = req.body.fav
@@ -125,7 +126,7 @@ export async function updateInsights(req, res) {
         await logModel.findOneAndUpdate({ _id: id }, { fav: fav })
         return res.status(200).json({ status: 'success' })
     } catch (error) {
-
+        res.json({ status: 'failed', message:'internal server error' })
     }
 }
 
@@ -138,6 +139,6 @@ export async function deleteInsights(req, res) {
         await logModel.findByIdAndDelete(id)
         return res.status(200).json({ status: 'success' })
     } catch (error) {
-
+        res.json({ status: 'failed', message:'internal server error' })
     }
 }
