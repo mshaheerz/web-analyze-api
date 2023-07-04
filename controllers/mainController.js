@@ -76,7 +76,7 @@ export function logout(req, res) {
 
 export async function getInsights(req, res) {
     try {
-        const { url } = req.body;
+        let { url } = req.body;
 
         //checking the url is valid
         const isUrl = await isValidHttpUrl(url)
