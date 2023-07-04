@@ -49,7 +49,7 @@ export async function register(req, res) {
         })
         res.status(200).json({ status: 'success', message: 'user successfully created', user });
     } catch (error) {
-        res.json({ status: 'failed', message: 'failed to register' })
+        res.json({ status: 'failed', message: 'User already registered' })
     }
 }
 
