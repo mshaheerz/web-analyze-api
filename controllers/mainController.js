@@ -47,7 +47,12 @@ export async function register(req, res) {
         const user = await userModel.create({
             email, password: hashSync(password, bcryptSalt)
         })
-        res.status(200).json({ status: 'success', message: 'user successfully created', user });
+
+        jwt.sign({ id: user._id }, jwtsecret, { expiresIn: '1d' }, (err, token) => {
+            if (err) throw err;
+            res.status(200).json({ status: 'success', message: 'user registration success', user,token })
+        })
+        // res.status(200).json({ status: 'success', message: 'user successfully created', user });
     } catch (error) {
         res.json({ status: 'failed', message: 'User already registered' })
     }
